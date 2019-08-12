@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/kyaroru/RNParallax/issues"
   },
-  "homepage": "https://github.com/kyaroru/RNParallax#readme"
+  "homepage": "https://github.com/kyaroru/RNParallax#readme",
+  "dependencies": {
+    "expo-linear-gradient": "^6.0.0"
+  }
 }

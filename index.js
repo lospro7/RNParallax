@@ -9,6 +9,7 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
+import {LinearGradient} from "expo-linear-gradient";
 
 const {
   height: SCREEN_HEIGHT,
@@ -75,6 +76,10 @@ const styles = StyleSheet.create({
     color: DEFAULT_TITLE_COLOR,
     textAlign: 'center',
     fontSize: 16,
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "space-between"
   },
 });
 
@@ -195,17 +200,23 @@ class RNParallax extends Component {
     const imageScale = this.getImageScale();
 
     return (
-      <Animated.Image
-        style={[
-          styles.backgroundImage,
-          {
-            height: this.getHeaderMaxHeight(),
-            opacity: imageOpacity,
-            transform: [{ translateY: imageTranslate }, { scale: imageScale }],
-          },
-        ]}
-        source={backgroundImage}
-      />
+      <View style={{flex: 1}}>
+        <Animated.Image
+          style={[
+            styles.backgroundImage,
+            {
+              height: this.getHeaderMaxHeight(),
+              opacity: imageOpacity,
+              transform: [{ translateY: imageTranslate }, { scale: imageScale }],
+            },
+          ]}
+          source={backgroundImage}
+        />
+        <LinearGradient
+            style={styles.gradient}
+            colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.1)", "rgba(0,0,0,0.3)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.7)"]}
+        />
+      </View>
     );
   }
 
