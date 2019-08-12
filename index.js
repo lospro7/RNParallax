@@ -84,11 +84,17 @@ const styles = StyleSheet.create({
 });
 
 class RNParallax extends Component {
-  constructor() {
-    super();
-    this.state = {
-      scrollY: new Animated.Value(0),
-    };
+  showingHeader = false;
+  headerAnimatedValue = new Animated.Value(0);
+  state = {
+    scrollY: new Animated.Value(0),
+    nativeScrollY: new Animated.Value(0),
+  }
+
+  constructor(props) {
+    super(props);
+    this.state.nativeScrollY.addListener(Animated.event([{value: this.state.scrollY}], {useNativeDriver: false}));
+    this.state.nativeScrollY.addListener(this.handleShowHeader.bind(this));
   }
 
   getHeaderMaxHeight() {
@@ -176,9 +182,10 @@ class RNParallax extends Component {
 
   getTitleTranslateY() {
     const { scrollY } = this.state;
+    const start = this.getExtraScrollHeight() ? 5 : 0;
     return scrollY.interpolate({
       inputRange: this.getInputRange(),
-      outputRange: [5, 0, 0],
+      outputRange: [start, 0, -20],
       extrapolate: 'clamp',
     });
   }
@@ -212,10 +219,10 @@ class RNParallax extends Component {
           ]}
           source={backgroundImage}
         />
-        <LinearGradient
+        {/* <LinearGradient
             style={styles.gradient}
             colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.1)", "rgba(0,0,0,0.3)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.7)"]}
-        />
+        /> */}
       </View>
     );
   }
@@ -311,35 +318,75 @@ class RNParallax extends Component {
 
   renderHeaderForeground() {
     const { renderNavBar } = this.props;
-    const navBarOpacity = this.getNavBarForegroundOpacity();
+    const top = this.headerAnimatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-200, 0]
+    })
 
     return (
       <Animated.View
         style={[
           styles.bar,
           {
+            top,
             height: this.getHeaderMinHeight(),
-            opacity: navBarOpacity,
-          },
-        ]}
-      >
+            opacity: this.headerAnimatedValue,
+          }
+        ]} >
         {renderNavBar()}
       </Animated.View>
     );
+  }
+
+  slideHeaderDown() {
+    this.headerAnimatedValue.setValue(0);
+    Animated.timing(
+      this.headerAnimatedValue,
+      {
+        toValue: 1,
+        duration: 500,
+      }
+    ).start();
+  }
+
+  slideHeaderUp() {
+    this.headerAnimatedValue.setValue(1);
+    Animated.timing(
+      this.headerAnimatedValue,
+      {
+        toValue: 0,
+        duration: 500,
+      }
+    ).start();
+  }
+
+  handleShowHeader(event) {
+    if (this.getHeaderHeight().__getValue() <= this.getHeaderMinHeight()) {
+      if (!this.showingHeader) {
+        this.slideHeaderDown();
+        this.showingHeader = true;
+      }
+    } else {
+      if (this.showingHeader) {
+        this.slideHeaderUp();
+        this.showingHeader = false;
+      }
+    }
   }
 
   renderScrollView() {
     const {
       renderContent, scrollEventThrottle, scrollViewStyle, contentContainerStyle, innerContainerStyle, scrollViewProps,
     } = this.props;
-    const { scrollY } = this.state;
+
     return (
       <Animated.ScrollView
         style={[styles.scrollView, scrollViewStyle]}
         contentContainerStyle={contentContainerStyle}
         scrollEventThrottle={scrollEventThrottle}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          [{ nativeEvent: { contentOffset: { y: this.state.nativeScrollY } } }],
+          {useNativeDriver: true},
         )}
         {...scrollViewProps}
       >
