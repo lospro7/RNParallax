@@ -29,6 +29,7 @@ const DEFAULT_NAVBAR_COLOR = '#3498db';
 const DEFAULT_BACKGROUND_COLOR = '#303F9F';
 const DEFAULT_TITLE_COLOR = 'white';
 
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
@@ -223,10 +224,16 @@ class RNParallax extends Component {
           ]}
           source={backgroundImage}
         />
-        {/* <LinearGradient
-            style={styles.gradient}
-            colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.1)", "rgba(0,0,0,0.3)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.7)"]}
-        /> */}
+        <AnimatedLinearGradient
+            style={[
+              styles.gradient,
+              {
+                height: this.getHeaderMaxHeight(),
+                transform: [{ translateY: imageTranslate }, { scale: imageScale }],
+              },
+            ]}
+            colors={["transparent", "rgba(0,0,0,0.7)"]}
+        />
       </View>
     );
   }
