@@ -97,6 +97,10 @@ class RNParallax extends Component {
     this.state.nativeScrollY.addListener(this.handleShowHeader.bind(this));
   }
 
+  componentDidMount() {
+    this.handleShowHeader();
+  }
+
   getHeaderMaxHeight() {
     const { headerMaxHeight } = this.props;
     return headerMaxHeight;
@@ -138,7 +142,7 @@ class RNParallax extends Component {
     const { scrollY } = this.state;
     return scrollY.interpolate({
       inputRange: this.getInputRange(),
-      outputRange: [0, 1, 1],
+      outputRange: [1, 1, 1],
       extrapolate: 'clamp',
     });
   }
@@ -320,7 +324,7 @@ class RNParallax extends Component {
     const { renderNavBar } = this.props;
     const top = this.headerAnimatedValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [-200, 0]
+      outputRange: [-200, STATUS_BAR_HEIGHT]
     })
 
     return (
@@ -344,7 +348,7 @@ class RNParallax extends Component {
       this.headerAnimatedValue,
       {
         toValue: 1,
-        duration: 500,
+        duration: 400,
       }
     ).start();
   }
@@ -360,8 +364,8 @@ class RNParallax extends Component {
     ).start();
   }
 
-  handleShowHeader(event) {
-    if (this.getHeaderHeight().__getValue() <= this.getHeaderMinHeight()) {
+  handleShowHeader() {
+    if (this.getHeaderHeight().__getValue() <= this.getHeaderMinHeight()+20) {
       if (!this.showingHeader) {
         this.slideHeaderDown();
         this.showingHeader = true;
