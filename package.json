@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/kyaroru/RNParallax#readme",
   "dependencies": {
-    "expo-linear-gradient": "^6.0.0"
+    "expo-linear-gradient": "^5.0.1"
   }
 }
