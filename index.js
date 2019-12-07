@@ -392,6 +392,7 @@ class RNParallax extends Component {
 
     return (
       <Animated.ScrollView
+        scrollIndicatorInsets={{top: 1, left: 0, bottom: 0, right: 0}}
         style={[styles.scrollView, scrollViewStyle]}
         contentContainerStyle={contentContainerStyle}
         scrollEventThrottle={scrollEventThrottle}
