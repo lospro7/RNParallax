@@ -1,7 +1,7 @@
 {
   "name": "react-native-parallax-header",
-  "version": "1.2.3",
-  "description": "A react native scroll view component with Parallax header :p",
+  "version": "1.2.4",
+  "description": "A react native scroll view component with Parallax header :p (modification with expo)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/kyaroru/RNParallax#readme",
   "dependencies": {
-    "expo-linear-gradient": "^5.0.1"
+    "expo-linear-gradient": "~8.1.0"
   }
 }
